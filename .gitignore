@@ -1,3 +1,16 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Playwright
+playwright-report/
+test-results/
+playwright/.cache/
+
 # OS files
 .DS_Store
 Thumbs.db

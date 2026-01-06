@@ -12,7 +12,39 @@
         <p class="subtitle">Welcome to My First App using RovoDev CLI</p>
         <button id="greetBtn" class="btn">Click Me!</button>
         <p id="message" class="message"></p>
+        
+        <!-- Feature Flags Admin Panel -->
+        <div id="featureFlagsPanel" class="feature-panel">
+            <h3>🚩 Feature Flags</h3>
+            <div class="flag-controls">
+                <label class="flag-item">
+                    <input type="checkbox" id="flag-darkMode" data-flag="darkMode">
+                    <span>🌙 Dark Mode</span>
+                </label>
+                <label class="flag-item">
+                    <input type="checkbox" id="flag-confettiEffect" data-flag="confettiEffect">
+                    <span>🎉 Confetti on Toggle</span>
+                </label>
+                <label class="flag-item">
+                    <input type="checkbox" id="flag-soundEffects" data-flag="soundEffects">
+                    <span>🔊 Sound on Toggle</span>
+                </label>
+                <label class="flag-item">
+                    <input type="checkbox" id="flag-animatedBackground" data-flag="animatedBackground">
+                    <span>✨ Animated Background</span>
+                </label>
+                <label class="flag-item">
+                    <input type="checkbox" id="flag-showGreetingCounter" data-flag="showGreetingCounter">
+                    <span>📊 Show Counter</span>
+                </label>
+            </div>
+            <button id="resetFlags" class="btn-small">Reset All</button>
+        </div>
     </div>
+    
+    <script src="featureFlags.js"></script>
+    <script src="features.js"></script>
     <script src="script.js"></script>
+    <script src="admin.js"></script>
 </body>
 </html>

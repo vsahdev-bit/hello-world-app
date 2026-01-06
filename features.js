@@ -4,8 +4,51 @@
 
 class Features {
     constructor() {
-        this.greetingCount = 0;
+        this.greetingCount = this.loadGreetingCount();
         this.confettiInterval = null;
+        this.visitCount = this.loadVisitCount();
+        this.trackVisit();
+    }
+    
+    /**
+     * Load greeting count from localStorage
+     */
+    loadGreetingCount() {
+        const saved = localStorage.getItem('greetingCount');
+        return saved ? parseInt(saved, 10) : 0;
+    }
+    
+    /**
+     * Save greeting count to localStorage
+     */
+    saveGreetingCount() {
+        localStorage.setItem('greetingCount', this.greetingCount.toString());
+    }
+    
+    /**
+     * Load visit count from localStorage
+     */
+    loadVisitCount() {
+        const saved = localStorage.getItem('visitCount');
+        return saved ? parseInt(saved, 10) : 0;
+    }
+    
+    /**
+     * Track a new visit
+     */
+    trackVisit() {
+        this.visitCount++;
+        localStorage.setItem('visitCount', this.visitCount.toString());
+        localStorage.setItem('lastVisit', new Date().toISOString());
+        console.log(`👋 Visit #${this.visitCount} tracked`);
+    }
+    
+    /**
+     * Get last visit date
+     */
+    getLastVisit() {
+        const lastVisit = localStorage.getItem('lastVisit');
+        return lastVisit ? new Date(lastVisit) : null;
     }
     
     /**
@@ -113,18 +156,36 @@ class Features {
         let counterElement = document.getElementById('greetingCounter');
         
         if (!counterElement) {
-            counterElement = document.createElement('p');
+            counterElement = document.createElement('div');
             counterElement.id = 'greetingCounter';
             counterElement.className = 'greeting-counter';
             document.querySelector('.container').appendChild(counterElement);
         }
         
-        counterElement.textContent = `Greetings shown: ${this.greetingCount}`;
+        // Build counter display with visit stats
+        const lastVisit = this.getLastVisit();
+        const lastVisitText = lastVisit ? 
+            `Last visit: ${this.formatDate(lastVisit)}` : 
+            'First visit!';
+        
+        counterElement.innerHTML = `
+            <div class="counter-stat">
+                <span class="counter-label">👋 Site Visits:</span>
+                <span class="counter-value">${this.visitCount}</span>
+            </div>
+            <div class="counter-stat">
+                <span class="counter-label">🎉 Greetings Shown:</span>
+                <span class="counter-value">${this.greetingCount}</span>
+            </div>
+            <div class="counter-date">${lastVisitText}</div>
+        `;
+        
         console.log('📊 Greeting counter shown');
     }
     
     updateGreetingCounter() {
         this.greetingCount++;
+        this.saveGreetingCount();
         this.showGreetingCounter();
     }
     
@@ -133,8 +194,34 @@ class Features {
         if (counterElement) {
             counterElement.remove();
         }
-        this.greetingCount = 0;
         console.log('📊 Greeting counter hidden');
+    }
+    
+    resetCounters() {
+        this.greetingCount = 0;
+        this.visitCount = 0;
+        this.saveGreetingCount();
+        localStorage.setItem('visitCount', '0');
+        localStorage.removeItem('lastVisit');
+        console.log('🔄 Counters reset');
+    }
+    
+    /**
+     * Format date for display
+     */
+    formatDate(date) {
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        
+        if (diffMins < 1) return 'Just now';
+        if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+        if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+        if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+        
+        return date.toLocaleDateString();
     }
 }
 

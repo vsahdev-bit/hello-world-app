@@ -78,6 +78,26 @@ document.getElementById('resetFlags').addEventListener('click', () => {
     }
 });
 
+// Add reset counters button
+const resetCountersBtn = document.createElement('button');
+resetCountersBtn.textContent = 'Reset Counters';
+resetCountersBtn.className = 'btn-small';
+resetCountersBtn.style.marginTop = '0.5rem';
+resetCountersBtn.addEventListener('click', () => {
+    if (confirm('Reset visit and greeting counters? This will set all counts to 0.')) {
+        features.resetCounters();
+        
+        // Refresh counter display if visible
+        if (featureFlags.isEnabled('showGreetingCounter')) {
+            features.showGreetingCounter();
+        }
+        
+        alert('✅ Counters reset successfully!');
+    }
+});
+
+document.getElementById('featureFlagsPanel').appendChild(resetCountersBtn);
+
 // Initialize on page load
 initializeAdminPanel();
 
